@@ -1,0 +1,272 @@
+{
+	"info": {
+		"_postman_id": "e5823237-af78-463c-bce9-b0035b67d627",
+		"name": "intercorp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "local",
+			"item": [
+				{
+					"name": "get swagger api",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v2/api-docs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v2",
+								"api-docs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "swagger page",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/swagger-ui/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"swagger-ui",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create client",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"age\": 38,\n  \"birthDate\": \"1983-09-15T13:39:19.242Z\",\n  \"lastName\": \"Cabral\",\n  \"name\": \"Mario\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/creacliente",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"creacliente"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "kpideclientes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/kpideclientes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"kpideclientes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list clients",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/listclientes?page=0&size=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"listclientes"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AWS",
+			"item": [
+				{
+					"name": "get swagger api",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://intercorp-env.eba-8vec6cwk.sa-east-1.elasticbeanstalk.com/v2/api-docs",
+							"protocol": "http",
+							"host": [
+								"intercorp-env",
+								"eba-8vec6cwk",
+								"sa-east-1",
+								"elasticbeanstalk",
+								"com"
+							],
+							"path": [
+								"v2",
+								"api-docs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "swagger page",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://intercorp-env.eba-8vec6cwk.sa-east-1.elasticbeanstalk.com/swagger-ui/",
+							"protocol": "http",
+							"host": [
+								"intercorp-env",
+								"eba-8vec6cwk",
+								"sa-east-1",
+								"elasticbeanstalk",
+								"com"
+							],
+							"path": [
+								"swagger-ui",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create client",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"age\": 38,\n  \"birthDate\": \"1983-09-15T13:39:19.242Z\",\n  \"lastName\": \"Cabral\",\n  \"name\": \"Mario\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://intercorp-env.eba-8vec6cwk.sa-east-1.elasticbeanstalk.com/api/creacliente",
+							"protocol": "http",
+							"host": [
+								"intercorp-env",
+								"eba-8vec6cwk",
+								"sa-east-1",
+								"elasticbeanstalk",
+								"com"
+							],
+							"path": [
+								"api",
+								"creacliente"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "kpideclientes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://intercorp-env.eba-8vec6cwk.sa-east-1.elasticbeanstalk.com/api/kpideclientes",
+							"protocol": "http",
+							"host": [
+								"intercorp-env",
+								"eba-8vec6cwk",
+								"sa-east-1",
+								"elasticbeanstalk",
+								"com"
+							],
+							"path": [
+								"api",
+								"kpideclientes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list clients",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://intercorp-env.eba-8vec6cwk.sa-east-1.elasticbeanstalk.com/api/listclientes?page=0&size=10",
+							"protocol": "http",
+							"host": [
+								"intercorp-env",
+								"eba-8vec6cwk",
+								"sa-east-1",
+								"elasticbeanstalk",
+								"com"
+							],
+							"path": [
+								"api",
+								"listclientes"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
