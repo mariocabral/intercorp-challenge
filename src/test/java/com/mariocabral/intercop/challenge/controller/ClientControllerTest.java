@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mariocabral.intercop.challenge.calculator.GenderCalculatorGenderizeClient;
 import com.mariocabral.intercop.challenge.model.Client;
 import com.mariocabral.intercop.challenge.model.KPIClient;
 import com.mariocabral.intercop.challenge.repository.ClientRespository;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -46,11 +48,14 @@ class ClientControllerTest {
     @Autowired
     private ClientRespository clientRespository;
 
+    private static String URL_GENDERIZE = "https://api.genderize.io?name=";
+
 
     @BeforeEach
     void setUp() {
         mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         clientRespository.deleteAll();
+        GenderCalculatorGenderizeClient.URL_GENDERIZE = URL_GENDERIZE;
     }
 
     @AfterEach
@@ -86,7 +91,7 @@ class ClientControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson)).andReturn();
 
         int status = mvcResult.getResponse().getStatus();
-        assertEquals(200, status);
+        assertEquals(HttpStatus.OK.value(), status);
         String content = mvcResult.getResponse().getContentAsString();
         Client result = mapFromJson(content, Client.class);
         assertEquals("TestName", result.getName());
@@ -98,6 +103,48 @@ class ClientControllerTest {
     }
 
 
+    @Test
+    void newClientInvalidData() throws Exception {
+        String uri = "/api/creacliente";
+        Client client = new Client();
+        client.setAge(29);
+        client.setName(null);
+        client.setLastName("TestLastName");
+        Date birthDate = new Date();
+        client.setBirthDate(birthDate);
+
+        String inputJson = mapToJson(client);
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.post(uri)
+                .contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson)).andReturn();
+
+        int status = mvcResult.getResponse().getStatus();
+        assertEquals(HttpStatus.BAD_REQUEST.value(), status);
+        String content = mvcResult.getResponse().getContentAsString();
+        assertTrue(content.contains("Invalid Client, field name required"));
+    }
+
+    @Test
+    void newClientInvalidGener() throws Exception {
+        String uri = "/api/creacliente";
+        Client client = new Client();
+        client.setAge(29);
+        client.setName("Mario");
+        client.setLastName("TestLastName");
+        Date birthDate = new Date();
+        client.setBirthDate(birthDate);
+
+        GenderCalculatorGenderizeClient.URL_GENDERIZE = "invalid_url";
+
+        String inputJson = mapToJson(client);
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.post(uri)
+                .contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson)).andReturn();
+
+        int status = mvcResult.getResponse().getStatus();
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), status);
+        String content = mvcResult.getResponse().getContentAsString();
+        assertTrue(content.contains("Invalid URL used to connect with genderize"));
+    }
+
 
 
     @Test
@@ -107,7 +154,7 @@ class ClientControllerTest {
         String uri = "/api/kpideclientes";
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)).andReturn();
         int status = mvcResult.getResponse().getStatus();
-        assertEquals(200, status);
+        assertEquals(HttpStatus.OK.value(), status);
         String content = mvcResult.getResponse().getContentAsString();
         KPIClient result = mapFromJson(content, KPIClient.class);
         Double meanAge = stats.getMean();
@@ -142,7 +189,7 @@ class ClientControllerTest {
         String uri = "/api/listclientes";
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)).andReturn();
         int status = mvcResult.getResponse().getStatus();
-        assertEquals(200, status);
+        assertEquals(HttpStatus.OK.value(), status);
 
         String content = mvcResult.getResponse().getContentAsString();
         ObjectMapper mapper = new ObjectMapper();

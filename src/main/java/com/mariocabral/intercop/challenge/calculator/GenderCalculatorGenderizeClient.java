@@ -15,14 +15,15 @@ import java.net.URL;
 @Slf4j
 public class GenderCalculatorGenderizeClient implements GenderCalculator{
 
+    public static String URL_GENDERIZE = "https://api.genderize.io?name=";
 
     @Override
     public Gender calculateGender(String name) {
         URL url = null;
         try {
-            url = new URL("https://api.genderize.io?name="+name);
+            url = new URL(URL_GENDERIZE+name);
         } catch (MalformedURLException e) {
-            throw new GenderCalculatorException("Invalid URL used to coneect with genderize", e);
+            throw new GenderCalculatorException("Invalid URL used to connect with genderize", e);
         }
         HttpURLConnection conn = null;
         String gender = null;
