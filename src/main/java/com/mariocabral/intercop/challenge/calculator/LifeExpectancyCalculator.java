@@ -16,9 +16,9 @@ public interface LifeExpectancyCalculator {
         int expectedLifeMen = 73;
         int expectedLife = 0;
         if (gender == GenderCalculator.Gender.FEMALE){
-            expectedLife = expectedLifeWoman - age;
+            expectedLife = expectedLifeWoman;
         } else {
-            expectedLife = expectedLifeMen - age;
+            expectedLife = expectedLifeMen;
         }
         LocalDate localBirthDate = birthDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate expectedLifeCalculated = localBirthDate.plusYears(expectedLife);

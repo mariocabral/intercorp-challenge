@@ -164,6 +164,41 @@ class ClientControllerTest {
         assertEquals(standardDeviation, result.getStandardDeviationAges());
     }
 
+    @Test
+    void kpiClientOneClient() throws Exception {
+        DescriptiveStatistics stats = new DescriptiveStatistics();
+        Client client = new Client();
+        client.setAge(29);
+        client.setName("Mario");
+        client.setLastName("TestLastName");
+        Date birthDate = new Date();
+        client.setBirthDate(birthDate);
+        clientRespository.save(client);
+        stats.addValue(29);
+        String uri = "/api/kpideclientes";
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)).andReturn();
+        int status = mvcResult.getResponse().getStatus();
+        assertEquals(HttpStatus.OK.value(), status);
+        String content = mvcResult.getResponse().getContentAsString();
+        KPIClient result = mapFromJson(content, KPIClient.class);
+        Double meanAge = stats.getMean();
+        assertEquals(meanAge.intValue(), result.getAvgAges());
+        BigDecimal standardDeviation = new BigDecimal(stats.getStandardDeviation());
+        standardDeviation = standardDeviation.setScale(2, RoundingMode.DOWN);
+        assertEquals(standardDeviation, result.getStandardDeviationAges());
+    }
+
+    @Test
+    void kpiClientEmpty() throws Exception {
+        DescriptiveStatistics stats = new DescriptiveStatistics();
+        String uri = "/api/kpideclientes";
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)).andReturn();
+        int status = mvcResult.getResponse().getStatus();
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), status);
+        String content = mvcResult.getResponse().getContentAsString();
+        assertTrue(content.contains("Fail kpi calculation"));
+    }
+
     private void populateDB(DescriptiveStatistics stats) {
         int ageMin = 1;
         int ageMax = 100;

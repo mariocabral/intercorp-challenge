@@ -4,6 +4,7 @@ import com.mariocabral.intercop.challenge.calculator.GenderCalculator;
 import com.mariocabral.intercop.challenge.calculator.GenderCalculatorGenderizeClient;
 import com.mariocabral.intercop.challenge.calculator.LifeExpectancyCalculator;
 import com.mariocabral.intercop.challenge.exception.InvalidClientException;
+import com.mariocabral.intercop.challenge.exception.KPIException;
 import com.mariocabral.intercop.challenge.model.Client;
 import com.mariocabral.intercop.challenge.model.KPIClient;
 import com.mariocabral.intercop.challenge.repository.ClientRespository;
@@ -25,6 +26,9 @@ public class ClientService {
 
     @Autowired
     private ClientRespository clientRespository;
+
+    private static final int DEFAULT_STDDEV = 0;
+
 
     public Client newClient(Client client)  {
         validate(client);
@@ -51,12 +55,19 @@ public class ClientService {
 
 
     public KPIClient kpiClient() {
-        int avgOfAge = clientRespository.getAvgOfAge();
-        BigDecimal stddevOfAge = clientRespository.getStddevOfAge();
-        KPIClient result = new KPIClient();
-        result.setAvgAges(avgOfAge);
-        result.setStandardDeviationAges(stddevOfAge.setScale(2, RoundingMode.DOWN));
-        return result;
+        try {
+            int avgOfAge = clientRespository.getAvgOfAge();
+            BigDecimal stddevOfAge = clientRespository.getStddevOfAge();
+            if (ObjectUtils.isEmpty(stddevOfAge)) {
+                stddevOfAge = new BigDecimal(DEFAULT_STDDEV);
+            }
+            KPIClient result = new KPIClient();
+            result.setAvgAges(avgOfAge);
+            result.setStandardDeviationAges(stddevOfAge.setScale(2, RoundingMode.DOWN));
+            return result;
+        }catch (NullPointerException e){
+            throw new KPIException("Fail kpi calculation", e);
+        }
     }
 
     public Page<Client> listClient(PageRequest pageRequest) {
